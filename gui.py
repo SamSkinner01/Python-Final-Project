@@ -56,23 +56,33 @@ class GUI:
 
         self.submit_button = tk.Button(self.input_frame, text="Submit", command=self.handle_instructor_submit)
 
+        self.name_frame = tk.Frame(self.output_frame)
+        self.dept_frame = tk.Frame(self.output_frame)
+        self.loc_frame = tk.Frame(self.output_frame)
+
         self.name = tk.StringVar()
         self.dept = tk.StringVar()
         self.loc = tk.StringVar()
 
-        self.name_label = tk.Label(self.output_frame, textvariable=self.name)
-        self.dept_label = tk.Label(self.output_frame, textvariable=self.dept)
-        self.loc_label = tk.Label(self.output_frame, textvariable=self.loc)
+        self.name_label = tk.Label(self.name_frame, textvariable=self.name)
+        self.dept_label = tk.Label(self.dept_frame, textvariable=self.dept)
+        self.loc_label = tk.Label(self.loc_frame, textvariable=self.loc)
 
-        self.name_label.pack(side="top")
-        self.dept_label.pack(side="top")
-        self.loc_label.pack(side="top")
+        self.output_frame.pack(side="left")
+        self.name_frame.pack(side="top")
+        self.dept_frame.pack(side="top")
+        self.loc_frame.pack(side="top")
+        self.name_label.pack(side="left")
+        self.dept_label.pack(side="left")
+        self.loc_label.pack(side="left")
 
         self.submit_button.pack(side="left")
 
     def display_department_information(self):
         self.clear()
 
+        self.loc_frame = tk.Frame(self.output_frame)
+        self.budget_frame = tk.Frame(self.output_frame)
         self.label_dept = tk.Label(self.input_frame, text="Enter Department Name: ")
         self.label_dept.pack(side="left")
 
@@ -85,11 +95,17 @@ class GUI:
         self.loc = tk.StringVar()
         self.budget = tk.StringVar()
 
-        self.loc_label = tk.Label(self.output_frame, textvariable=self.loc)
-        self.budget_label = tk.Label(self.output_frame, textvariable=self.budget)
+        self.loc_label = tk.Label(self.loc_frame, textvariable=self.loc)
+        self.budget_label = tk.Label(self.budget_frame, textvariable=self.budget)
 
-        self.loc_label.pack(side="top")
-        self.budget_label.pack(side="top")
+
+        self.loc_frame.pack(side="top")
+        self.budget_frame.pack(side="top")
+        self.loc_label.pack(side="left")
+        self.budget_label.pack(side="left")
+
+        self.output_frame.pack(side="left")
+
 
 
     def clear(self):
