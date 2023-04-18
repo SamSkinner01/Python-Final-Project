@@ -21,6 +21,8 @@ class GUI:
         self.create_navigation()
 
 
+
+
         self.main_window.mainloop()
 
     def create_navigation(self):
@@ -44,6 +46,7 @@ class GUI:
         self.navigation.pack(side='top')
 
     def display_instructor_information(self):
+
         self.clear()
 
         self.top_frame = tk.Frame(self.main_frame)
@@ -62,13 +65,17 @@ class GUI:
         self.output.pack(side="left")
         self.bottom_frame.pack(side="top", anchor="w")
 
+        self.entry_ins.bind('<Return>', self.get_instructor_info)
+
 
 
 
 
 
     def display_department_information(self):
+
         self.clear()
+
 
         self.top_frame = tk.Frame(self.main_frame)
         self.label_dept = tk.Label(self.top_frame, text="Enter Department Name: ")
@@ -86,15 +93,21 @@ class GUI:
         self.output.pack(side="left")
         self.bottom_frame.pack(side="top", anchor="w")
 
+        self.entry_dept.bind('<Return>', self.get_department_info)
+
 
     def clear(self):
         self.main_frame.destroy()
         self.main_frame = tk.Frame(self.main_window)
         self.main_frame.pack(side='top')
 
-    def get_instructor_info(self):
+    def get_instructor_info(self, event=None):
+        if event is not None and event.keysym != 'Return':
+            return
+
+        id = self.entry_ins.get()
         # Get the instructor ID from the entry box
-        if id := self.entry_ins.get():
+        if id in self.instructors:
             # Get the instructor name
             name = self.instructors[id][0]
 
@@ -108,9 +121,13 @@ class GUI:
         else:
             self.output_var.set("Information not found.")
 
-    def get_department_info(self):
+    def get_department_info(self, event=None):
+        if event is not None and event.keysym != 'Return':
+            return
+
+        dept_name = self.entry_dept.get()
         # Get the department name from the entry box
-        if dept_name := self.entry_dept.get():
+        if dept_name in self.departments:
             # Get the department location
             loc = self.departments[dept_name][0]
 
