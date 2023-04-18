@@ -13,14 +13,13 @@ class GUI:
         self.main_window.geometry("400x150")
 
 
+        # Main frame
+        self.main_frame = tk.Frame(self.main_window)
+        self.main_frame.pack(side='top')
+
         # Navigation bar
         self.create_navigation()
 
-        # Create frames
-        self.input_frame = tk.Frame(self.main_window) # Will hold the Entry and Submit buttons
-        self.output_frame = tk.Frame(self.main_window) # Will hold the output 
-        self.input_frame.pack()
-        self.output_frame.pack()
 
         self.main_window.mainloop()
 
@@ -45,107 +44,79 @@ class GUI:
         self.navigation.pack(side='top')
 
     def display_instructor_information(self):
-        # Clear the frames
         self.clear()
 
-        self.label_ins = tk.Label(self.input_frame, text="Enter Instructor ID: ")
+        self.top_frame = tk.Frame(self.main_frame)
+        self.label_ins = tk.Label(self.top_frame, text="Enter Instructor ID: ")
         self.label_ins.pack(side="left")
+        self.entry_ins = tk.Entry(self.top_frame)
+        self.entry_ins.pack(side="left")
+        self.button_ins = tk.Button(self.top_frame, text="Submit", command=self.get_instructor_info)
+        self.button_ins.pack(side="left")
+        self.top_frame.pack(side="top", anchor="w")
 
-        self.instructor_id_entry = tk.Entry(self.input_frame, width=10)
-        self.instructor_id_entry.pack(side="left")
+        # Align output under the entry box and left aligned
+        self.bottom_frame = tk.Frame(self.main_frame)
+        self.output_var = tk.StringVar()
+        self.output = tk.Label(self.bottom_frame, textvariable=self.output_var, justify="left")
+        self.output.pack(side="left")
+        self.bottom_frame.pack(side="top", anchor="w")
 
-        self.submit_button = tk.Button(self.input_frame, text="Submit", command=self.handle_instructor_submit)
 
-        self.name_frame = tk.Frame(self.output_frame)
-        self.dept_frame = tk.Frame(self.output_frame)
-        self.loc_frame = tk.Frame(self.output_frame)
 
-        self.name = tk.StringVar()
-        self.dept = tk.StringVar()
-        self.loc = tk.StringVar()
 
-        self.name_label = tk.Label(self.name_frame, textvariable=self.name)
-        self.dept_label = tk.Label(self.dept_frame, textvariable=self.dept)
-        self.loc_label = tk.Label(self.loc_frame, textvariable=self.loc)
 
-        self.output_frame.pack(side="left")
-        self.name_frame.pack(side="top")
-        self.dept_frame.pack(side="top")
-        self.loc_frame.pack(side="top")
-        self.name_label.pack(side="left")
-        self.dept_label.pack(side="left")
-        self.loc_label.pack(side="left")
-
-        self.submit_button.pack(side="left")
 
     def display_department_information(self):
         self.clear()
 
-        self.loc_frame = tk.Frame(self.output_frame)
-        self.budget_frame = tk.Frame(self.output_frame)
-        self.label_dept = tk.Label(self.input_frame, text="Enter Department Name: ")
+        self.top_frame = tk.Frame(self.main_frame)
+        self.label_dept = tk.Label(self.top_frame, text="Enter Department Name: ")
         self.label_dept.pack(side="left")
+        self.entry_dept = tk.Entry(self.top_frame)
+        self.entry_dept.pack(side="left")
+        self.button_dept = tk.Button(self.top_frame, text="Submit", command=self.get_department_info)
+        self.button_dept.pack(side="left")
+        self.top_frame.pack(side="top", anchor="w")
 
-        self.department_name_entry = tk.Entry(self.input_frame, width=10)
-        self.department_name_entry.pack(side="left")
-
-        self.submit_button = tk.Button(self.input_frame, text="Submit", command=self.handle_department_submit)
-        self.submit_button.pack(side="left")
-        
-        self.loc = tk.StringVar()
-        self.budget = tk.StringVar()
-
-        self.loc_label = tk.Label(self.loc_frame, textvariable=self.loc)
-        self.budget_label = tk.Label(self.budget_frame, textvariable=self.budget)
-
-
-        self.loc_frame.pack(side="top")
-        self.budget_frame.pack(side="top")
-        self.loc_label.pack(side="left")
-        self.budget_label.pack(side="left")
-
-        self.output_frame.pack(side="left")
-
+        # Align output under the entry box and left aligned
+        self.bottom_frame = tk.Frame(self.main_frame)
+        self.output_var = tk.StringVar()
+        self.output = tk.Label(self.bottom_frame, textvariable=self.output_var, justify="left")
+        self.output.pack(side="left")
+        self.bottom_frame.pack(side="top", anchor="w")
 
 
     def clear(self):
-        # Clears the input and output frames
-        self.input_frame.destroy()
-        self.output_frame.destroy()
+        self.main_frame.destroy()
+        self.main_frame = tk.Frame(self.main_window)
+        self.main_frame.pack(side='top')
 
-        # Recreate the frames as empty frames
-        self.input_frame = tk.Frame(self.main_window)
-        self.output_frame = tk.Frame(self.main_window)
+    def get_instructor_info(self):
+        # Get the instructor ID from the entry box
+        if id := self.entry_ins.get():
+            # Get the instructor name
+            name = self.instructors[id][0]
 
-        # Pack the frames
-        self.input_frame.pack()
-        self.output_frame.pack()
+            # Get the department name
+            dept_name = self.instructors[id][1]
 
-    def handle_instructor_submit(self):
-        text = self.instructor_id_entry.get()
+            # Get the department location
+            loc = self.departments[dept_name][0]
 
-        if text in self.instructors:
-            self.name.set(f"Name: {self.instructors[text][0]}")
-            self.dept.set(f"Department: {self.instructors[text][1]}")
-            self.loc.set(f"Building: {self.departments[self.instructors[text][1]][0]}")
+            self.output_var.set(f"Name: {name}\nDepartment: {dept_name}\nLocation: {loc}")
         else:
-            self.name.set("Instructor not found")
-            self.dept.set("")
-            self.loc.set("")
+            self.output_var.set("Information not found.")
 
+    def get_department_info(self):
+        # Get the department name from the entry box
+        if dept_name := self.entry_dept.get():
+            # Get the department location
+            loc = self.departments[dept_name][0]
 
-    def handle_department_submit(self):
-        text = self.department_name_entry.get()
+            # Get the department budget
+            budget = self.departments[dept_name][1]
 
-        if text in self.departments:
-            self.loc.set(f"Building: {self.departments[text][0]}")
-            self.budget.set(f"Budget: {self.departments[text][1]}")
+            self.output_var.set(f"Location: {loc}\nBudget: {budget}")
         else:
-            self.loc.set("Department not found")
-            self.budget.set("")
-
-        
-
-    
-
-
+            self.output_var.set("Information not found.")
